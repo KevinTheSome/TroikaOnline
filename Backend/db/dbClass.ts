@@ -1,5 +1,5 @@
 import { Database } from "jsr:@db/sqlite";
-import { User } from "../types/User.ts";
+import { Player } from "../types/Player.ts";
 
 export class SqlDataBase {
     private db:Database 
@@ -19,7 +19,7 @@ export class SqlDataBase {
     }
 
 
-    newPlayer(user:User): void {
+    newPlayer(user:Player): void {
         this.db.prepare(
             `
               INSERT INTO players (username, password) VALUES (?, ?);
