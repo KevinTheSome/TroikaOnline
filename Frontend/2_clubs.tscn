@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://biwfeftqh6qau"]
+
+[ext_resource type="Texture2D" uid="uid://daenj4oslfy2t" path="res://Playing Cards/SVG-cards-1.3/2_of_clubs.svg" id="1_igp0y"]
+
+[node name="2Clubs" type="Node2D"]
+
+[node name="2OfClubs" type="Sprite2D" parent="."]
+position = Vector2(712, 385)
+texture = ExtResource("1_igp0y")

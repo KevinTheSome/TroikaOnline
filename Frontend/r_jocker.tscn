@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://7omljtbottpi"]
+
+[ext_resource type="Texture2D" uid="uid://bkdnykbwle8ek" path="res://Playing Cards/SVG-cards-1.3/red_joker.svg" id="1_2stn8"]
+
+[node name="RJocker" type="Node2D"]
+
+[node name="RedJoker" type="Sprite2D" parent="."]
+texture = ExtResource("1_2stn8")
