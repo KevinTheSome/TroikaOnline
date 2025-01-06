@@ -5,18 +5,26 @@ import { Player } from "../types/Player.ts";
 
 export async function signinRoute(ctx: Context, db: SqlDataBase){
 
-    const username = ctx.req.param('username')
-    const password = ctx.req.param('password')
+    const body = await ctx.req.parseBody()
+    const username = String(body.username).trim()
+    const password = String(body.password).trim()
+    let player : Record<string, any>[] | undefined
+    
+    
 
     const messageBuffer = new TextEncoder().encode(password);
     const hashBuffer = await crypto.subtle.digest("SHA-256", messageBuffer);
     const hash = encodeHex(hashBuffer);
 
-    const player = db.getPlayers(username)
-
-    if(hash != player[0].password){
-        return ctx.text("Password don't match" , 403)
-    }else{
-        return ctx.text("" , 200) //idk user token but how do i make a user token?
+    try {
+        player = db.getPlayers(username)
+    } catch (error) {
+        return ctx.text(String(error) , 404)
     }
+
+    if(player == undefined || player == null || player.length == 0){
+        return ctx.text("User not found by name: " + username , 404)
+    }
+    
+    return ctx.json(player)
 }

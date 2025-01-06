@@ -11,7 +11,7 @@ export class SqlDataBase {
             `
               CREATE TABLE IF NOT EXISTS players (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT,
+                username TEXT UNIQUE,
                 password TEXT
               );
             `,
@@ -27,10 +27,10 @@ export class SqlDataBase {
           ).run(user.username, user.password); //todo encrypt this password
     }
 
-    getPlayers(username:string): Record<string, any>[] {
-        const stmt = this.db.prepare("SELECT * FROM players WHERE username = ?");
+    getPlayers(username:string): Record<string, any>[] | undefined {   //TODO fix this it dont work :(
+        const stmt = this.db.prepare("SELECT * FROM players WHERE username= ? ;");
         stmt.run(username);
-        return stmt.all();
+        return stmt.all<Player>();
     }
 
     delPlayer(id:number): void {
