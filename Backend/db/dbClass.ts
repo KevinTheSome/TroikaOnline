@@ -14,6 +14,12 @@ export class SqlDataBase {
                 username TEXT UNIQUE,
                 password TEXT
               );
+
+              CREATE TABLE IF NOT EXISTS lobbies (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                public BOOLEAN NOT NULL,
+                code TEXT NOT NULL UNIQUE
+              );
             `,
           ).run();
     }
@@ -24,14 +30,20 @@ export class SqlDataBase {
             `
               INSERT INTO players (username, password) VALUES (?, ?);
             `,
-          ).run(user.username, user.password); //todo encrypt this password
+          ).run(user.username, user.password);
     }
 
-    getPlayers(username:string): Record<string, any>[] | undefined {   //TODO fix this it dont work :(
+    getPlayers(username:string): Player[] | undefined {
         const stmt = this.db.prepare("SELECT * FROM players WHERE username= ? ;");
-        stmt.run(username);
-        return stmt.all<Player>();
+        // stmt.run(username);
+        return stmt.all<Player>(username);
     }
+
+    getPlayersStats(username:string): Player[] | undefined {   //TODO fix this it dont work :(
+      const stmt = this.db.prepare("SELECT * FROM players WHERE username= ? ;");
+      // stmt.run(username);
+      return stmt.all<Player>(username);
+  }
 
     delPlayer(id:number): void {
       const stmt =this.db.prepare(`DELETE FROM players WHERE id = ?;`,)

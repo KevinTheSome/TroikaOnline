@@ -13,18 +13,18 @@ import { Card } from "./types/Card.ts";
 import {SqlDataBase} from "./db/dbClass.ts";
 
 
-const db = new SqlDataBase()  //Db
-const app = new Hono()  //Routers
+const db = new SqlDataBase()    //Db
+const app = new Hono()          //Routers
 
-app.get('/', (c: Context) => {          //TODO remove or make in to something
+app.get('/', (c: Context) => {                  //TODO remove or make in to something
     return c.text('Hello Troika player!')
   })
 
-app.post('/signup', (c: Context) => {    //TODO make a user and ridirect to login
+app.post('/signup', (c: Context) => {           
   return signupRoute(c, db)
 })
 
-app.post('/signin', (c: Context) => {    //TODO return token
+app.post('/signin', (c: Context) => {           
   return signinRoute(c, db)
 })
 
@@ -32,15 +32,15 @@ app.get('/user/:username', (c: Context) => {      //TODO return user stats examp
   return getUserRoute(c, db)
 })
 
-app.post('/newLobby', (c: Context) => {  //TODO easy shit make a lobby in db and rerout join
+app.post('/newLobby', (c: Context) => {         //TODO easy shit make a lobby in db and rerout join
   return newLobbbyRoute(c)
 })
 
-app.post('/join/:uid', (c: Context) => {      //TODO remove or use to make join
+app.post('/join/:uid', (c: Context) => {        //TODO remove or use to make join
   return joinLobbbyRoute(c)
 })
 
-app.get('/explorer', (c: Context) => {  //TODO return all not private lobbies
+app.get('/explorer', (c: Context) => {          //TODO return all not private lobbies
   return c.text('Hello Hono!')
 })
 
@@ -59,7 +59,7 @@ app.get(  //TODO pain
   })
 )
 
-app.notFound((c: Context) => {      //TODO return 404
+app.notFound((c: Context) => {      
   return missingRoute(c)
 })
 

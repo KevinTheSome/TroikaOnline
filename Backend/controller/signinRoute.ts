@@ -26,5 +26,23 @@ export async function signinRoute(ctx: Context, db: SqlDataBase){
         return ctx.text("User not found by name: " + username , 404)
     }
     
-    return ctx.json(player)
+    if(player[0].password != hash){
+        return ctx.text("Password don't match" , 404)
+    }else{
+        const tokenBuffer = new TextEncoder().encode(player[0].username + player[0].password);
+        const hashTokenBuffer = await crypto.subtle.digest("SHA-256", tokenBuffer);
+        const Token = encodeHex(hashTokenBuffer);
+        return ctx.text(Token , 200)
+    }
+
+
+    // return ctx.json(player)
+
+
+
+
+
+
+
+
 }
