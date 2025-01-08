@@ -1,0 +1,95 @@
+[gd_scene load_steps=2 format=3 uid="uid://c201d7cgrfpwf"]
+
+[ext_resource type="Script" path="res://Profile_manu.gd" id="1_fminp"]
+
+[node name="Profile" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fminp")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -150.0
+offset_right = 360.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="rUsername" type="TextEdit" parent="MarginContainer/VBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(40, 100)
+layout_mode = 2
+placeholder_text = "Username"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="rPassword" type="TextEdit" parent="MarginContainer/VBoxContainer/VBoxContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(40, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Password"
+
+[node name="rPasswordConfirm" type="TextEdit" parent="MarginContainer/VBoxContainer/VBoxContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(40, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Password Confirme"
+
+[node name="Register" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Register"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="lUsername" type="TextEdit" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(40, 100)
+layout_mode = 2
+placeholder_text = "Username"
+
+[node name="lPassword" type="TextEdit" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(40, 100)
+layout_mode = 2
+placeholder_text = "Password"
+
+[node name="Login" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Login"
+
+[node name="Back" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 42
+text = "Back"
+
+[node name="Message" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/VBoxContainer2/rUsername" to="." method="_on_r_username_text_changed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/VBoxContainer2/HBoxContainer/rPassword" to="." method="_on_r_password_text_changed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/VBoxContainer2/HBoxContainer/rPasswordConfirm" to="." method="_on_r_password_confirm_text_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer2/Register" to="." method="_on_register_pressed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/VBoxContainer/lUsername" to="." method="_on_l_username_text_changed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/VBoxContainer/lPassword" to="." method="_on_l_password_text_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer/Login" to="." method="_on_login_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

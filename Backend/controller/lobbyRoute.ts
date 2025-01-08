@@ -14,10 +14,10 @@ export async function newLobbbyRoute(ctx: Context , db: SqlDataBase){
         return ctx.text("Private bool not valid" , 404)
     }
 
-    if(body.pBool == "true"){
-        pBool = true
-    }else{
+    if(body.pBool == "true"){  //quick fix
         pBool = false
+    }else{
+        pBool = true
     }
 
     let code = ''

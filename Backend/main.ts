@@ -48,7 +48,7 @@ app.get('/explor', (c: Context) => {
   return explorLobby(c , db)
 })
 
-app.get(  //TODO pain
+app.get(                                        //TODO pain
   '/ws',
   upgradeWebSocket((c:Context) => {
     return {

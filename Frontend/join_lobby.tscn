@@ -18,10 +18,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -75.0
-offset_top = -56.5
-offset_right = 225.0
-offset_bottom = 243.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -29,19 +29,38 @@ grow_vertical = 2
 layout_mode = 2
 alignment = 1
 
-[node name="Lobby_code" type="TextEdit" parent="MarginContainer/VBoxContainer"]
-clip_contents = false
-custom_minimum_size = Vector2(60, 60)
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="Refresh" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Lobby_code" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+clip_contents = false
+custom_minimum_size = Vector2(600, 80)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 42
 placeholder_text = "Lobby code"
 
-[node name="Join_lobby" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Join_lobby" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 42
 text = "Join lobby"
 
 [node name="Back" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 42
 text = "Back
 "
 
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer2/Refresh" to="." method="_on_refresh_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

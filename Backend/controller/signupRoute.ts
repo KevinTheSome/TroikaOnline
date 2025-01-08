@@ -5,13 +5,18 @@ import { newPlayer } from "../types/Player.ts";
 
 export async function signupRoute(ctx: Context, db: SqlDataBase){
 
-    const body = await ctx.req.parseBody()
-    const username = String(body.username).trim()
-    const password = String(body.password).trim()
-    const passwordConfirme = String(body.passwordConfirme)
+    const json = await ctx.req.json()
+    const username = String(json.username).trim()
+    const password = String(json.password).trim()
+    const passwordConfirme = String(json.passwordConfirme)
+
+    if(username == "" || username == null || username == undefined || password == "" || password == null || password == undefined || passwordConfirme == "" || passwordConfirme == null || passwordConfirme == undefined){
+        return ctx.json({message: "All fields are required" , error: "All fields are required error"})
+    }
+
 
     if(password != passwordConfirme){
-        return ctx.text("Password don't match" , 403)
+        return ctx.json({message: "Password don't match" , error: "Password don't match error"})
     }else{
 
         const messageBuffer = new TextEncoder().encode(password);
@@ -20,11 +25,11 @@ export async function signupRoute(ctx: Context, db: SqlDataBase){
 
         try {
             db.newPlayer(newPlayer(undefined, username, hash))
-        } catch (error) {
-            return ctx.text("User already exists error: " + error + " " + username + " " + hash , 404)
+        } catch (_error) {
+            return ctx.json({message: "User already exists" , error: "User already exists error"})
         }
 
         
-        return ctx.text("User created" , 200)
+        return ctx.json({ message: "User created" , error: ""})
     }
 }

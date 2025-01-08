@@ -5,9 +5,9 @@ import { Player } from "../types/Player.ts";
 
 export async function signinRoute(ctx: Context, db: SqlDataBase){
 
-    const body = await ctx.req.parseBody()
-    const username = String(body.username).trim()
-    const password = String(body.password).trim()
+    const json = await ctx.req.json()
+    const username = String(json.username).trim()
+    const password = String(json.password).trim()
     let player : Record<string, any>[] | undefined
     
     
@@ -23,16 +23,16 @@ export async function signinRoute(ctx: Context, db: SqlDataBase){
     }
 
     if(player == undefined || player == null || player.length == 0){
-        return ctx.text("User not found by name: " + username , 404)
+        return ctx.json({message: "User not found" , error: "User not found error"})
     }
     
     if(player[0].password != hash){
-        return ctx.text("Password don't match" , 404)
+        return ctx.json({message: "Password don't match" , error: "Password don't match error"})
     }else{
         const tokenBuffer = new TextEncoder().encode(player[0].username + player[0].password);
         const hashTokenBuffer = await crypto.subtle.digest("SHA-256", tokenBuffer);
         const Token = encodeHex(hashTokenBuffer);
-        return ctx.text(Token , 200)
+        return ctx.json({message: "User found" , token: Token ,username: player[0].username, wins: player[0].wins, losses: player[0].losses, error: ""})
     }
 
 
