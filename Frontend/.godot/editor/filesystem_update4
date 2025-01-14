@@ -1,9 +1,7 @@
-res://main_manu.gd
 res://main_manu.tscn
-res://settings_manu.tscn
 res://mode_swiche.tscn
-res://join_lobby.tscn
-res://Profile_manu.gd
 res://ProfileSettings_manu.tscn
-res://Global.gd
-res://join_lobby.gd
+res://join_lobby.tscn
+res://settings_manu.tscn
+res://create_lobby.tscn
+res://create_lobby.gd

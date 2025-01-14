@@ -1,5 +1,6 @@
 import { Database } from "jsr:@db/sqlite";
 import { Player } from "../types/Player.ts";
+import { Lobby } from "../types/Lobby.ts";
 
 export class SqlDataBase {
     private db:Database 
@@ -65,6 +66,21 @@ export class SqlDataBase {
     getPublicLobby(): Record<string, any>[] | undefined {
       const stmt = this.db.prepare(`SELECT * FROM lobbies WHERE public = 1;`)
       return  stmt.all();
+    }
+
+    getLobby(code:string): Record<string, any>[] | undefined {
+      const stmt = this.db.prepare(`SELECT * FROM lobbies WHERE code = ?;`)
+      return stmt.all<Lobby>(code);
+    }
+
+    updateLobby(code:string , players:number , publicBool:boolean): Record<string, any>[] | undefined {
+      const stmt = this.db.prepare(`UPDATE lobbies SET players = ? , public = ? WHERE code = ?;`)
+      return stmt.all<Lobby>(players , publicBool , code);
+    }
+
+    delLobby(code:string): Record<string, any>[] | undefined {
+      const stmt = this.db.prepare(`DELETE FROM lobbies WHERE code = ?;`)
+      return stmt.all<Lobby>(code);
     }
 
 }

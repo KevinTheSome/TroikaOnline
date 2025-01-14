@@ -1,6 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://baypwwmoybv8o"]
+[gd_scene load_steps=6 format=3 uid="uid://baypwwmoybv8o"]
 
 [ext_resource type="Script" path="res://create_lobby.gd" id="1_b6upw"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_rvo1o"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_wuqos"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_gnomo"]
+
+[sub_resource type="Theme" id="Theme_12yjm"]
+CheckButton/font_sizes/font_size = 42
+CheckButton/icons/checked = SubResource("ImageTexture_rvo1o")
+CheckButton/icons/checked_disabled = SubResource("ImageTexture_wuqos")
+CheckButton/icons/checked_disabled_mirrored = null
+CheckButton/icons/checked_mirrored = null
+CheckButton/icons/unchecked = SubResource("ImageTexture_gnomo")
+CheckButton/icons/unchecked_disabled = null
+CheckButton/icons/unchecked_disabled_mirrored = null
+CheckButton/icons/unchecked_mirrored = null
 
 [node name="Create_lobby" type="Control"]
 layout_mode = 3
@@ -18,10 +35,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -75.0
-offset_top = -56.5
-offset_right = 225.0
-offset_bottom = 243.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -29,22 +46,37 @@ grow_vertical = 2
 layout_mode = 2
 alignment = 1
 
-[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer"]
-clip_contents = false
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-placeholder_text = "Lobby name"
-
 [node name="Private lobby" type="CheckButton" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+theme = SubResource("Theme_12yjm")
+theme_override_font_sizes/font_size = 42
+button_mask = 7
 text = "Private lobby"
+expand_icon = true
 
 [node name="Create lobby" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 42
 text = "Create lobby"
 
 [node name="Back" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 42
 text = "Back"
 
+[node name="RealPrivatLobbyCheck" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 341.0
+offset_top = 149.0
+offset_right = 491.0
+offset_bottom = 185.0
+scale = Vector2(4, 4)
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Create lobby" to="." method="_on_create_lobby_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="RealPrivatLobbyCheck" to="." method="_on_real_privat_lobby_check_pressed"]

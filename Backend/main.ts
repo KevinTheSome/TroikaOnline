@@ -41,7 +41,7 @@ app.post('/lobby/new', (c: Context) => {
 })
 
 app.post('/lobby/join', (c: Context) => {        //TODO remove or use to make join
-  return joinLobbbyRoute(c)
+  return joinLobbbyRoute(c , db)
 })
 
 app.get('/explor', (c: Context) => {          
