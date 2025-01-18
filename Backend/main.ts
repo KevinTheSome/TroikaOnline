@@ -8,6 +8,7 @@ import { signupRoute } from "./controller/signupRoute.ts";
 import { signinRoute } from "./controller/signinRoute.ts";
 import { getUserRoute } from "./controller/getUserRoute.ts";
 import { newLobbbyRoute , joinLobbbyRoute , explorLobby } from "./controller/lobbyRoute.ts";
+import { connectionCloseHandeler , onMessageHandeler , connectionErrorHandeler } from "./controller/webSocketHandeler.ts";
 
 import { Card } from "./types/Card.ts";
 import {SqlDataBase} from "./db/dbClass.ts";
@@ -48,17 +49,17 @@ app.get('/explor', (c: Context) => {
   return explorLobby(c , db)
 })
 
-app.get(                                        //TODO pain
-  '/ws',
-  upgradeWebSocket((c:Context) => {
+app.get('/ws/:lobbyCode',upgradeWebSocket((c:Context) => {
     return {
       onMessage(event, ws) {
-        console.log(`Message from client: ${event.data}`)
-        ws.send('Hello from server!')
+        return onMessageHandeler(c, db, ws, event)
       },
       onClose: () => {
-        console.log('Connection closed')
+        return connectionCloseHandeler(c , db)
       },
+      onError: (evt,ws) => {
+        return connectionErrorHandeler(evt, ws)
+      }
     }
   })
 )

@@ -4,4 +4,4 @@ res://ProfileSettings_manu.tscn
 res://join_lobby.tscn
 res://settings_manu.tscn
 res://create_lobby.tscn
-res://create_lobby.gd
+res://lobby.tscn

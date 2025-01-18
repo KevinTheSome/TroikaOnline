@@ -10,7 +10,7 @@ export enum gameState {
 
 export type Event = {
     gameState: gameState,
-    lobbyToken: string,
+    data: string,
 };
 
 // For the Frontend
@@ -19,9 +19,10 @@ export enum gameAction {
     Join,
     Leave,
     Move,
+    Login,
 }
 
 export type userEvent = {
     gameAction: gameAction,
-    userToken: string,
+    data: string,
 };

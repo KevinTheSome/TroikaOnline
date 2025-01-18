@@ -17,6 +17,9 @@ func _on_join_lobby_pressed() -> void:
 	
 func join(code: String):
 	print(code)
+	Global.lobby["code"] = code
+	get_tree().change_scene_to_file("res://lobby.tscn")
+	
 
 
 func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
