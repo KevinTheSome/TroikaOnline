@@ -15,7 +15,7 @@ func _ready() -> void:
 		
 	if Global.lobby["code"] == "" || Global.player["token"] == null:
 		print("Code is not defined")
-		
+	
 	var err = socket.connect_to_url("ws://127.0.0.1:8000/ws/" + lobbyCode)
 	if err != OK:
 		print("Unable to connect")	
