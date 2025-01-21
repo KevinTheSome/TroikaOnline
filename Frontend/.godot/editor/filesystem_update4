@@ -1,8 +1,8 @@
-res://lobby.tscn
-res://lobby.gd
 res://main_manu.tscn
 res://mode_swiche.tscn
 res://ProfileSettings_manu.tscn
 res://join_lobby.tscn
 res://settings_manu.tscn
 res://create_lobby.tscn
+res://lobby.tscn
+res://lobby.gd

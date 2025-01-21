@@ -10,18 +10,17 @@ import { getUserRoute } from "./controller/getUserRoute.ts";
 import { newLobbbyRoute , joinLobbbyRoute , explorLobby } from "./controller/lobbyRoute.ts";
 import { wsHandeler } from "./controller/wsHandeler.ts";
 
-import { Player } from "./types/Player.ts";
 import {SqlDataBase} from "./db/dbClass.ts";
 
 
 const db = new SqlDataBase()    //Db
 const app = new Hono()          //Routers
 const wsHandelerClass = new wsHandeler()
+
 //@ts-ignore: we got a null operator on it I dont think it can be undefined
 const port = +Deno.env.get("PORT") || 8000  
 const hostname = Deno.env.get("HOSTNAME") || "127.0.0.1"
 
-const playerList = new Map<string, string>()
 
 app.get('/', (c: Context) => {                  //TODO remove or make in to something
     return c.text('Hello Troika player!')

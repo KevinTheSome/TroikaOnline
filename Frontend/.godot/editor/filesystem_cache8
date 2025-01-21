@@ -1,27 +1,27 @@
 fc8a56933c4b1c8d796fdb8f7a9f9475
-::res://::1737238452
+::res://::1737476339
 2_clubs.tscn::PackedScene::2993658764231719804::1734353209::0::1::::<><>::uid://daenj4oslfy2t::::res://Playing Cards/SVG-cards-1.3/2_of_clubs.svg
 create_lobby.gd::GDScript::-1::1736846550::0::1::::<>Control<>::
-create_lobby.tscn::PackedScene::2436916966867529228::1737238445::0::1::::<><>::res://create_lobby.gd
-export_presets.cfg::TextFile::-1::1736364299::0::1::::<><>::
+create_lobby.tscn::PackedScene::2436916966867529228::1737400937::0::1::::<><>::res://create_lobby.gd
+export_presets.cfg::TextFile::-1::1737371046::0::1::::<><>::
 Global.gd::GDScript::-1::1737096384::0::1::::<>Node<>::
 http_request.gd::GDScript::-1::1734025087::0::1::::<>Node<>::
 icon.svg::CompressedTexture2D::3758244523287950042::1733387361::1736161124::1::::<><>::
 join_lobby.gd::GDScript::-1::1737096546::0::1::::<>Control<>::
-join_lobby.tscn::PackedScene::6311186892354835896::1737238445::0::1::::<><>::res://join_lobby.gd
-lobby.gd::GDScript::-1::1737098324::0::1::::<>Control<>::
-lobby.tscn::PackedScene::2230799360228239703::1737238445::0::1::::<><>::res://lobby.gd
+join_lobby.tscn::PackedScene::6311186892354835896::1737400937::0::1::::<><>::res://join_lobby.gd
+lobby.gd::GDScript::-1::1737400933::0::1::::<>Control<>::
+lobby.tscn::PackedScene::2230799360228239703::1737400937::0::1::::<><>::res://lobby.gd
 main.tscn::PackedScene::7063893791518021057::1734353209::0::1::::<><>::uid://c6qwllybjbv4p::::res://node_2d.tscn
 main_manu.gd::GDScript::-1::1736358261::0::1::::<>Control<>::
-main_manu.tscn::PackedScene::7809572183100374199::1737238445::0::1::::<><>::res://main_manu.gd
+main_manu.tscn::PackedScene::7809572183100374199::1737400937::0::1::::<><>::res://main_manu.gd
 mode_swiche.gd::GDScript::-1::1734348064::0::1::::<>Control<>::
-mode_swiche.tscn::PackedScene::5731827102791121634::1737238445::0::1::::<><>::res://mode_swiche.gd
+mode_swiche.tscn::PackedScene::5731827102791121634::1737400937::0::1::::<><>::res://mode_swiche.gd
 node_2d.tscn::PackedScene::6983081596693663093::1734353209::0::1::::<><>::res://http_request.gd
-ProfileSettings_manu.tscn::PackedScene::6721135272790571941::1737238445::0::1::::<><>::res://Profile_manu.gd
+ProfileSettings_manu.tscn::PackedScene::6721135272790571941::1737400937::0::1::::<><>::res://Profile_manu.gd
 Profile_manu.gd::GDScript::-1::1736357788::0::1::::<>Control<>::
 r_jocker.tscn::PackedScene::2275693034746373162::1734353209::0::1::::<><>::uid://bkdnykbwle8ek::::res://Playing Cards/SVG-cards-1.3/red_joker.svg
 settings_manu.gd::GDScript::-1::1736282918::0::1::::<>Control<>::
-settings_manu.tscn::PackedScene::3755761714697922918::1737238445::0::1::::<><>::res://settings_manu.gd
+settings_manu.tscn::PackedScene::3755761714697922918::1737400937::0::1::::<><>::res://settings_manu.gd
 TroikaOnlineIcon.svg::CompressedTexture2D::5412394189678767514::1734026519::1736161124::1::::<><>::
 ::res://Playing Cards/::1733387393
 ::res://Playing Cards/PNG-cards-1.3/::1736161125

@@ -8,6 +8,11 @@ func sendData(gameAction : String, data: Dictionary):
 	var dataString = JSON.stringify(data)
 	socket.send_text(JSON.stringify({"gameAction": gameAction , "data": dataString}))
 
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		socket.send_text(JSON.stringify({"gameAction": "Leave" , "data": Global.player["token"]}))
+		get_tree().quit()
+	
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if Global.player["token"] == null || Global.player["token"] == "":
@@ -25,7 +30,7 @@ func _ready() -> void:
 		await get_tree().create_timer(2).timeout
 
 		# Send data.
-		socket.send_text(JSON.stringify({"gameAction": "Login" , "data": lobbyCode}))
+		socket.send_text(JSON.stringify({"gameAction": "Login" , "data": Global.player["token"]}))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -41,7 +46,7 @@ func _process(delta: float) -> void:
 	# to send and receive data.
 	if state == WebSocketPeer.STATE_OPEN:
 		while socket.get_available_packet_count():
-			print("Got data from server: ", socket.get_packet().get_string_from_utf8())
+			response_handeler(socket.get_packet().get_string_from_utf8())
 
 	# WebSocketPeer.STATE_CLOSING means the socket is closing.
 	# It is important to keep polling for a clean close.
@@ -50,12 +55,19 @@ func _process(delta: float) -> void:
 
 	# WebSocketPeer.STATE_CLOSED means the connection has fully closed.
 	# It is now safe to stop polling.
-	elif state == WebSocketPeer.STATE_CLOSED:
-		# The code will be -1 if the disconnection was not properly notified by the remote peer.
+	elif state == WebSocketPeer.STATE_CLOSED: #add a error message if this is true
 		var code = socket.get_close_code()
 		print("WebSocket closed with code: %d. Clean: %s" % [code, code != -1])
-		set_process(false) # Stop processing.
+		set_process(false)
 
+func response_handeler(packet: String):
+	var dicPacket = JSON.parse_string(packet)
+	print(dicPacket)
+	#if(dicPacket["lobby"]["code"] == lobbyCode):
+		#
+	#else:
+		#pass
+	
 
 func _on_button_pressed() -> void:
 	sendData("yes", {"test":"test"})

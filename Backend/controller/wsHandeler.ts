@@ -1,13 +1,14 @@
 import { Context } from "hono";
 import { SqlDataBase } from "../db/dbClass.ts";
 import { Player } from "../types/Player.ts";
-import { WSContext,UpgradeWebSocket,WSReadyState } from "hono/ws";
+import { WSContext } from "hono/ws";
 
 export class wsHandeler {
-    private playerList = new Map<Number, WSContext | undefined>()
+    private playerList = new Map<string, [WSContext | undefined, string | undefined]>()
+    private lobbyList = []
 
+    connectionCloseHandeler(ctx: Context, _db: SqlDataBase){
 
-    async connectionCloseHandeler(ctx: Context, db: SqlDataBase){
         return ctx.json({message: "Connection closed" , error: ""})
     }
 
@@ -17,12 +18,10 @@ export class wsHandeler {
         return ws.send(JSON.stringify({message: "There was an error in the connection : " + event.type , error: event.type}))
     }
 
-    async onMessageHandeler(ctx: Context, db: SqlDataBase, ws: WSContext, event: MessageEvent){
-        this.playerList.set(Math.random(), ws) //test
+    onMessageHandeler(ctx: Context, db: SqlDataBase, ws: WSContext, event: MessageEvent){
         
         const message = JSON.parse(event.data)
         const lobbyCode = ctx.req.param('lobbyCode')
-
         const lobby = db.getLobby(lobbyCode)
 
         if(lobby == undefined || lobby == null || lobby.length == 0){
@@ -32,12 +31,35 @@ export class wsHandeler {
             return ws.send(JSON.stringify({message: "Lobby not found" , error: "Lobby not found error"}))
         }
 
-        console.log("Message from client: " + event.data)
-        console.log(this.playerList)
-        for(const player of this.playerList.values()){
-            player.send(JSON.stringify({message: "LobbyUpdate" , lobby: lobby[0]}))
+        if(message["gameAction"] == "Login"){ //add error handaling if data empty
+            this.playerList.set(message["data"], [ws, lobbyCode])
         }
 
+        if(message["gameAction"] == "Leave"){ //add error handaling if data empty
+            this.playerList.delete(message["data"])
+            console.log(message["data"])
+        }
+
+        console.log("Client gameAction: " + message["gameAction"] + " data: " + message["data"])
+        console.log(this.playerList)
+        console.log(this.lobbyList)
+
+        // for(const lob of this.lobbyList){
+        //     for(const player of this.playerList.values()){
+        //         if(player[1] == lob){
+        //             player[0]?.send(JSON.stringify({gameState: "LobbyUpdate" , lobby: lob, player: player}))
+        //         }
+        //     }
+        // }
+
+        for (const [playerName, playerData] of this.playerList.entries()) {   //I love ai ;3
+            if (playerData[1] === lobbyCode) {
+                playerData[0]?.send(JSON.stringify({ gameState: "LobbyUpdate", lobby: lobbyCode, player: playerName }));
+            }
+        }
+
+
+            
         // switch (event.data.gameState) {
         //     case "Lobby":
         //         console.log(`Message from client: ${event.data}`)

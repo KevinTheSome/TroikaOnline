@@ -68,6 +68,11 @@ export class SqlDataBase {
       return  stmt.all();
     }
 
+    getLobbies(): Record<string, any>[] | undefined {
+      const stmt = this.db.prepare(`SELECT * FROM lobbies;`)
+      return  stmt.all();
+    }
+
     getLobby(code:string): Record<string, any>[] | undefined {
       const stmt = this.db.prepare(`SELECT * FROM lobbies WHERE code = ?;`)
       return stmt.all<Lobby>(code);
