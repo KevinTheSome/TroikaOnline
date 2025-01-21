@@ -30,7 +30,7 @@ func _ready() -> void:
 		await get_tree().create_timer(2).timeout
 
 		# Send data.
-		socket.send_text(JSON.stringify({"gameAction": "Login" , "data": Global.player["token"]}))
+		sendData("Login",{"token":Global.player["token"] ,"username":Global.player["username"]})
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -63,12 +63,8 @@ func _process(delta: float) -> void:
 func response_handeler(packet: String):
 	var dicPacket = JSON.parse_string(packet)
 	print(dicPacket)
-	#if(dicPacket["lobby"]["code"] == lobbyCode):
-		#
-	#else:
-		#pass
 	
 
 func _on_button_pressed() -> void:
-	sendData("yes", {"test":"test"})
+	sendData("Test", {"test":"test"})
 	

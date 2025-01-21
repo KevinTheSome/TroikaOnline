@@ -52,6 +52,8 @@ export class SqlDataBase {
       return stmt.all<Player>(username);
   }
 
+  
+
     delPlayer(id:number): void {
       const stmt =this.db.prepare(`DELETE FROM players WHERE id = ?;`,)
       stmt.run(id);
