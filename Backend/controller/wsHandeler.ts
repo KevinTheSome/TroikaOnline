@@ -11,6 +11,7 @@ export class wsHandeler {
     private sendToLobby(gameState: string, data: string|object,lobbyCode: string){
         for (const [playerName, playerData] of this.playerList.entries()) {   //I love ai ;3
             if (playerData[1] === lobbyCode) {
+                console.log("sent: " + JSON.stringify({gameState: gameState, data: data} + " to " + lobbyCode))
                 playerData[0]?.send(JSON.stringify({gameState: gameState, data: data}));
             }
         }
@@ -28,6 +29,7 @@ export class wsHandeler {
     onMessageHandeler(ctx: Context, db: SqlDataBase, ws: WSContext, event: MessageEvent){
         
         const message = JSON.parse(event.data)
+        const clientData = JSON.parse(message["data"])
         const lobbyCode = ctx.req.param('lobbyCode')
         const lobby = db.getLobby(lobbyCode)
 
@@ -41,32 +43,34 @@ export class wsHandeler {
         console.log("Client gameAction: " + message["gameAction"] + " data: " + message["data"] + " lobbyCode: " + lobbyCode)
 
         switch (message["gameAction"]) {
+            case "Login":
+                console.log("Login from: " + clientData.token + " username: " + clientData.username)
+                this.playerList.set(clientData["token"], [ws, lobbyCode])
+                this.sendToLobby("LobbyUpdate", {"type": "Login" , "username": clientData["username"]} , lobbyCode)
+                break;
+            case "Leave":
+                this.playerList.delete(clientData["token"])
+                this.sendToLobby("LobbyUpdate", {"type": "Leave" , "username": clientData["username"]} , lobbyCode)
+                break;
             case "Start":
-                console.log(`Message from client: ${event.data}`)
+                this.sendToLobby("Start", {"message": "Game started"} , lobbyCode)
+                break;
+            case "End":
+                this.sendToLobby("End", {"message": "Game ended"} , lobbyCode)
+                this.playerList.delete(clientData["token"])
+                db.delLobby(lobbyCode)
+                break;
+            case "YourTurn":
+                console.log(`Message from client: ${event.data}`) //todo maybe make in one call
+                break;
+            case "OpponentTurn":
+                console.log(`Message from client: ${event.data}`) //todo maybe make in one call
                 break;
             case "Test":
                 this.sendToLobby("Test", "Hello evryone in the lobby " + lobbyCode, lobbyCode)
                 break;
-            case "End":
-                console.log(`Message from client: ${event.data}`)
-                break;
-            case "YourTurn":
-                console.log(`Message from client: ${event.data}`)
-                break;
-            case "OpponentTurn":
-                console.log(`Message from client: ${event.data}`)
-                break;
-            case "Leave":
-                this.playerList.delete(message["data"])
-                this.sendToLobby("LobbyUpdate", message["data"], lobbyCode)
-                break;
-            case "Login":
-                console.log("Login from: " + message.data.token + " username: " + message.data.username)
-                this.playerList.set(message["data"]["token"], [ws, lobbyCode])
-                this.sendToLobby("LobbyUpdate", {"type": "Login" , "username": message["data"]["username"]} , lobbyCode)
-                break;
             default:
-                console.log(`Message from client: ${event.data}`)
+                console.log("Unknown gameAction: " + message["gameAction"] + " data: " + clientData + " lobbyCode: " + lobbyCode)
                 break;
         }
 

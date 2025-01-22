@@ -10,7 +10,7 @@ func sendData(gameAction : String, data: Dictionary):
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		socket.send_text(JSON.stringify({"gameAction": "Leave" , "data": Global.player["token"]}))
+		sendData("Leave",{"token":Global.player["token"] ,"username":Global.player["username"]})
 		get_tree().quit()
 	
 # Called when the node enters the scene tree for the first time.
@@ -61,10 +61,38 @@ func _process(delta: float) -> void:
 		set_process(false)
 
 func response_handeler(packet: String):
-	var dicPacket = JSON.parse_string(packet)
-	print(dicPacket)
+	var responseObj = JSON.parse_string(packet)
+	match responseObj["gameState"]:
+		"LobbyUpdate":
+			if(responseObj["data"]["type"] == "Login"):
+				print(responseObj["data"]["username"] + " Joined the lobby") #run the code when someone joins
+			else:
+				print(responseObj["data"]["username"] + " Left the lobby") #run the code when someone leavs
+				
+		"Start":
+			print("Lobby started") #Game has started
+			
+		"End":
+			print("Lobby ended") #Game has ended
+			sendData("Leave",{"token":Global.player["token"] ,"username":Global.player["username"]})
+			Global.lobby["code"] = ""
+			get_tree().change_scene_to_file("res://main_manu.tscn")
+			
+			
+		"Test":
+			print("Test " + packet)
+		_: #Defualt
+			print(packet)
 	
 
 func _on_button_pressed() -> void:
 	sendData("Test", {"test":"test"})
 	
+
+
+func _on_start_pressed() -> void:
+	sendData("Start", {"start":"start"})
+
+
+func _on_end_pressed() -> void:
+	sendData("End", {"end":"end"})

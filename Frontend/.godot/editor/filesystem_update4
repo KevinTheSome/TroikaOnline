@@ -6,3 +6,4 @@ res://settings_manu.tscn
 res://create_lobby.tscn
 res://lobby.tscn
 res://lobby.gd
+res://main_manu.gd

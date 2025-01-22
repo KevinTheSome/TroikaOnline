@@ -11,13 +11,30 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_j125g")
 
-[node name="Button" type="Button" parent="."]
+[node name="Test" type="Button" parent="."]
 layout_mode = 0
 offset_left = 586.0
 offset_top = 306.0
 offset_right = 686.0
 offset_bottom = 406.0
+text = "Test"
+
+[node name="Start" type="Button" parent="."]
+offset_left = 584.0
+offset_top = 452.0
+offset_right = 684.0
+offset_bottom = 552.0
+text = "Start Game"
+
+[node name="End" type="Button" parent="."]
+offset_left = 587.0
+offset_top = 573.0
+offset_right = 687.0
+offset_bottom = 673.0
+text = "End Game"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Test" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="End" to="." method="_on_end_pressed"]
