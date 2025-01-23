@@ -26,6 +26,8 @@ export class wsHandeler {
         return ws.send(JSON.stringify({message: "There was an error in the connection : " + event.type , error: event.type}))
     }
 
+
+
     onMessageHandeler(ctx: Context, db: SqlDataBase, ws: WSContext, event: MessageEvent){
         
         const message = JSON.parse(event.data)
@@ -60,11 +62,8 @@ export class wsHandeler {
                 this.playerList.delete(clientData["token"])
                 db.delLobby(lobbyCode)
                 break;
-            case "YourTurn":
-                console.log(`Message from client: ${event.data}`) //todo maybe make in one call
-                break;
-            case "OpponentTurn":
-                console.log(`Message from client: ${event.data}`) //todo maybe make in one call
+            case "GameTurn":
+                this.sendToLobby("GameTurn", {"username": clientData["username"],"move": clientData["move"]} , lobbyCode)
                 break;
             case "Test":
                 this.sendToLobby("Test", "Hello evryone in the lobby " + lobbyCode, lobbyCode)

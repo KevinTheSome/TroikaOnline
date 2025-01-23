@@ -7,6 +7,9 @@ var lobbyCode = Global.lobby["code"]
 func sendData(gameAction : String, data: Dictionary):
 	var dataString = JSON.stringify(data)
 	socket.send_text(JSON.stringify({"gameAction": gameAction , "data": dataString}))
+	
+func setMessage(message:String):
+	$Message.text = message
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -78,6 +81,12 @@ func response_handeler(packet: String):
 			Global.lobby["code"] = ""
 			get_tree().change_scene_to_file("res://main_manu.tscn")
 			
+		"GameTurn":
+			print(packet)
+			
+		"Error":
+			setMessage(responseObj["data"]["message"])
+			
 			
 		"Test":
 			print("Test " + packet)
@@ -96,3 +105,23 @@ func _on_start_pressed() -> void:
 
 func _on_end_pressed() -> void:
 	sendData("End", {"end":"end"})
+
+
+func _on_game_turn_test_pressed() -> void:
+	sendData("GameTurn", {"username":Global.player["username"],"move":"idk"})
+
+
+func _on_pause_pressed() -> void:
+	$PreGame.visible = false
+	$"Pause manu".visible = true
+
+
+func _on_back_pressed() -> void:
+	$PreGame.visible = true
+	$"Pause manu".visible = false
+
+
+func _on_leave_pressed() -> void:
+	sendData("Leave",{"token":Global.player["token"] ,"username":Global.player["username"]})
+	Global.lobby["code"] = ""
+	get_tree().change_scene_to_file("res://main_manu.tscn")
