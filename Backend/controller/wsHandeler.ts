@@ -1,15 +1,16 @@
 import { Context } from "hono";
 import { SqlDataBase } from "../db/dbClass.ts";
 import { Player } from "../types/Player.ts";
+import { Game } from "../controller/GameLogic.ts";
 import { WSContext } from "hono/ws";
 
 
 export class wsHandeler {
     private playerList = new Map<string, [WSContext | undefined, string | undefined]>()
-    private lobbyList = []
+    private gameList : Array<String> = []  //later to be remade using game class
 
     private sendToLobby(gameState: string, data: string|object,lobbyCode: string){
-        for (const [playerName, playerData] of this.playerList.entries()) {   //I love ai ;3
+        for (const [_playerName, playerData] of this.playerList.entries()) {   //I love ai ;3
             if (playerData[1] === lobbyCode) {
                 console.log("sent: " + JSON.stringify({gameState: gameState, data: data} + " to " + lobbyCode))
                 playerData[0]?.send(JSON.stringify({gameState: gameState, data: data}));
@@ -48,14 +49,22 @@ export class wsHandeler {
             case "Login":
                 console.log("Login from: " + clientData.token + " username: " + clientData.username)
                 this.playerList.set(clientData["token"], [ws, lobbyCode])
+                db.updateLobby(lobbyCode, lobby[0].players + 1, lobby[0].public)
                 this.sendToLobby("LobbyUpdate", {"type": "Login" , "username": clientData["username"]} , lobbyCode)
                 break;
             case "Leave":
                 this.playerList.delete(clientData["token"])
                 this.sendToLobby("LobbyUpdate", {"type": "Leave" , "username": clientData["username"]} , lobbyCode)
+
+                db.updateLobby(lobbyCode, lobby[0].players - 1, lobby[0].public)
+                if(db.getLobby(lobbyCode)[0].players == 0){ //go f yourself TS 
+                    db.delLobby(lobbyCode)
+                }
                 break;
             case "Start":
                 this.sendToLobby("Start", {"message": "Game started"} , lobbyCode)
+                this.gameList.push(lobbyCode)
+                db.delLobby(lobbyCode)
                 break;
             case "End":
                 this.sendToLobby("End", {"message": "Game ended"} , lobbyCode)
@@ -64,6 +73,7 @@ export class wsHandeler {
                 break;
             case "GameTurn":
                 this.sendToLobby("GameTurn", {"username": clientData["username"],"move": clientData["move"]} , lobbyCode)
+
                 break;
             case "Test":
                 this.sendToLobby("Test", "Hello evryone in the lobby " + lobbyCode, lobbyCode)

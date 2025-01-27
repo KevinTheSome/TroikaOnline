@@ -1,8 +1,9 @@
 extends Control
 
 var socket = WebSocketPeer.new()
-
-var lobbyCode = Global.lobby["code"]
+var lobbyInfo : Dictionary
+var lobbyCode : String = Global.lobby["code"]
+var gameStarted : bool = false
 
 func sendData(gameAction : String, data: Dictionary):
 	var dataString = JSON.stringify(data)
@@ -69,11 +70,18 @@ func response_handeler(packet: String):
 		"LobbyUpdate":
 			if(responseObj["data"]["type"] == "Login"):
 				print(responseObj["data"]["username"] + " Joined the lobby") #run the code when someone joins
+				
+				print(lobbyInfo)
 			else:
 				print(responseObj["data"]["username"] + " Left the lobby") #run the code when someone leavs
+				lobbyInfo["players"] = responseObj["data"]["username"]
+				print(lobbyInfo)
+				
 				
 		"Start":
-			print("Lobby started") #Game has started
+			$PreGame.visible = false
+			$Game.visible = true
+			gameStarted = true
 			
 		"End":
 			print("Lobby ended") #Game has ended
@@ -112,13 +120,21 @@ func _on_game_turn_test_pressed() -> void:
 
 
 func _on_pause_pressed() -> void:
-	$PreGame.visible = false
-	$"Pause manu".visible = true
+	if(gameStarted == true):
+		$Game.visible = false
+		$"Pause manu".visible = true
+	else:
+		$PreGame.visible = false
+		$"Pause manu".visible = true
 
 
 func _on_back_pressed() -> void:
-	$PreGame.visible = true
-	$"Pause manu".visible = false
+	if(gameStarted == true):
+		$Game.visible = true
+		$"Pause manu".visible = false
+	else :
+		$PreGame.visible = true
+		$"Pause manu".visible = false
 
 
 func _on_leave_pressed() -> void:
