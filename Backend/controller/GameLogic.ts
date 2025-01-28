@@ -7,18 +7,23 @@ export class Game {
     deck: Card[] = Deck.getFullCardDeck();
     players: string[] = [];
 
-    // constructor(
-    //     public players: string[]
-    // )
+    constructor(
+        public lobbycode: string,
+        public playerArr: string[]
+    )
+    {
+        this.players = this.playerArr
+    }
+
+    public updatePlayerArr(parr: string[]){
+        this.players = parr
+    }
 }
-
-
 
 export class Card {
     constructor(
         public suit: ESuits,
         public value: string,
-        public playedBy: string = ''
     ) { }
 
     numericValue(): number {
@@ -80,8 +85,8 @@ export class Deck{
     }
 
     static calculateCallbreakWinner(cardA: Card, cardB: Card, playingSuit: ESuits): Card {
-        cardA = new Card(cardA.suit, cardA.value, cardA.playedBy)
-        cardB = new Card(cardB.suit, cardB.value, cardB.playedBy)
+        cardA = new Card(cardA.suit, cardA.value)
+        cardB = new Card(cardB.suit, cardB.value)
 
         if (cardA.suit === cardB.suit) {
             return cardA.numericValue() > cardB.numericValue() ? cardA : cardB

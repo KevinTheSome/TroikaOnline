@@ -7,7 +7,17 @@ import { WSContext } from "hono/ws";
 
 export class wsHandeler {
     private playerList = new Map<string, [WSContext | undefined, string | undefined]>()
-    private gameList : Array<String> = []  //later to be remade using game class
+    private gameList = new Map<string, Game>()
+
+    private GetPLayersInLobby(lobbyCode: string): string[] {
+        const players: string[] = []
+        for (const [playerName, playerData] of this.playerList.entries()) {   //I love ai ;3
+            if (playerData[1] === lobbyCode) {
+                players.push(playerName)
+            }
+        }
+        return players  
+    }
 
     private sendToLobby(gameState: string, data: string|object,lobbyCode: string){
         for (const [_playerName, playerData] of this.playerList.entries()) {   //I love ai ;3
@@ -63,8 +73,9 @@ export class wsHandeler {
                 break;
             case "Start":
                 this.sendToLobby("Start", {"message": "Game started"} , lobbyCode)
-                this.gameList.push(lobbyCode)
+                this.gameList.set(lobbyCode, new Game(lobbyCode,this.GetPLayersInLobby(lobbyCode)))
                 db.delLobby(lobbyCode)
+                console.log(this.gameList)
                 break;
             case "End":
                 this.sendToLobby("End", {"message": "Game ended"} , lobbyCode)
