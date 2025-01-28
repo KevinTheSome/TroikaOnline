@@ -11,3 +11,10 @@ export enum EFacecardValues {
     QUEEN = 13,
     ACE = 14
 };
+
+export enum EStatus{
+    STARTED = "started",
+    WAITING = "waiting",
+    IN_PROGRESS = "in progress",
+    FINISHED = "finished"
+}

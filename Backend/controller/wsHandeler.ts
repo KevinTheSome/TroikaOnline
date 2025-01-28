@@ -80,6 +80,7 @@ export class wsHandeler {
             case "End":
                 this.sendToLobby("End", {"message": "Game ended"} , lobbyCode)
                 this.playerList.delete(clientData["token"])
+                this.gameList.delete(lobbyCode)
                 db.delLobby(lobbyCode)
                 break;
             case "GameTurn":

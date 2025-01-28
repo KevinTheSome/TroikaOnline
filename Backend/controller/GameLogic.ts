@@ -1,11 +1,17 @@
-import { ESuits } from "../types/Game.ts";
+import { ESuits, EStatus } from "../types/Game.ts";
 
 //thank you to https://github.com/sudbasnet/Callbreak-Backend-Node-Typescript for the deck code
 
 export class Game {
     
     deck: Card[] = Deck.getFullCardDeck();
+    activeDeck: Card[] = [];
+    playedDeck: Card[] = [];
+    winner: string = "";
+
+    activePlayer: string = "";
     players: string[] = [];
+    status: EStatus = EStatus.STARTED
 
     constructor(
         public lobbycode: string,
@@ -17,6 +23,85 @@ export class Game {
 
     public updatePlayerArr(parr: string[]){
         this.players = parr
+    }
+
+    private startGame() { //todo make it workd
+        this.status = EStatus.STARTED
+        this.activePlayer = this.players[0]
+        return {
+            deckSize: this.deck.length,
+            card: Deck.dealCards(6, this.players.length)
+        }
+    }
+
+    private winGame(player: string) {
+        return JSON.stringify({message: player + " has won!" , error: ""})
+    }
+
+    private endGame(player: string) {
+        this.status = EStatus.FINISHED
+        return JSON.stringify({message: player + " has lost!" , error: ""})
+    }
+
+    public move(playedCard: Card, player: string, cardCount: number) {
+        if(this.status != EStatus.STARTED){
+            return JSON.stringify({message: "Game is not started" , error: "Game is not started"})
+        }
+
+        if(playedCard == undefined || player == undefined){
+            return JSON.stringify({message: "All fields are required" , error: "All fields are required error"})
+        }
+
+        if(!this.players.includes(player)){
+            return JSON.stringify({message: "Player is not in the game" , error: "Player is not in the game error"})
+        }
+
+        if(this.playedDeck.includes(playedCard)){
+            return JSON.stringify({message: "Card is already played" , error: "Card is already played error"})
+        }
+
+
+        if(this.activeDeck.length !<= 0 && cardCount < 6){
+            this.playedDeck.push(playedCard)
+            return JSON.stringify({message: "Card played" , error: ""}) //give him a card in return
+        }
+
+        if(this.activeDeck.length <= 0 && cardCount <= 0){  //win condition
+            if(this.winner != "" ){
+                return
+            }
+            this.winner = player
+            return this.winGame(player)
+        }
+
+        if(playedCard.numericValue() < this.activeDeck[0].numericValue()){
+            return JSON.stringify({message: "Card cannot be played" , error: "Card cannot be played error"})
+        }
+
+        if(playedCard.numericValue() == 6){ //todo add the special logic
+            this.activeDeck.push(playedCard)
+            return JSON.stringify({message: "Card played" , error: ""})
+        }
+
+        if(playedCard.numericValue() == 10){ //todo add the special logic
+            this.playedDeck.push(...this.activeDeck)
+            this.activeDeck = []
+            this.activeDeck.push(playedCard)
+            return JSON.stringify({message: "Card played" , error: ""})
+        }
+
+        if(playedCard.numericValue() == this.activeDeck[0].numericValue() && this.activeDeck[0].numericValue() == this.activeDeck[1].numericValue() && this.activeDeck[1].numericValue() == this.activeDeck[2].numericValue()){
+            this.playedDeck.push(...this.activeDeck)
+            this.activeDeck = []
+            this.activeDeck.push(playedCard)
+            return JSON.stringify({message: "Card played" , error: ""})
+        }
+
+
+        this.activeDeck.push(playedCard)
+        return JSON.stringify({message: "Card played" , error: ""})
+
+
     }
 }
 
