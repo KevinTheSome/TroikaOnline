@@ -10,11 +10,11 @@ export async function newLobbbyRoute(ctx: Context , db: SqlDataBase){
         return ctx.json({message: "Private bool not found" , error: "Private bool not found, use pBool"})
     }
 
-    if(json.pBool != "true" && json.pBool != "false"){
+    if(json.pBool != "true" && json.pBool != "false" && json.pBool != false && json.pBool != true){
         return ctx.json({message: "Private bool is not valid" , error: "Private bool not is not valid"})
     }
 
-    if(json.pBool == "true"){  //quick fix
+    if(json.pBool == "true" || json.pBool == true){  //quick fix
         pBool = false
     }else{
         pBool = true
@@ -30,7 +30,8 @@ export async function newLobbbyRoute(ctx: Context , db: SqlDataBase){
     } catch (_error) {
         db.newLobby(pBool , code)
     }
-    
+
+    console.log("New lobby created: " + code)
     return ctx.json({message: "Lobby created" , error: ""})
 }
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://61u67dv6c4hv"]
 
 [ext_resource type="Script" path="res://lobby.gd" id="1_j125g"]
-[ext_resource type="PackedScene" uid="uid://235xyrck0h82" path="res://placeHolderCard.tscn" id="2_5470g"]
+[ext_resource type="Texture2D" uid="uid://cn3tdt66upl00" path="res://Playing Cards/back.png" id="3_irrwt"]
 
 [node name="Lobby" type="Control"]
 layout_mode = 3
@@ -30,6 +30,7 @@ offset_top = 488.0
 offset_right = 682.0
 offset_bottom = 511.0
 text = "User maybe ?"
+horizontal_alignment = 1
 
 [node name="P1" type="PanelContainer" parent="Game/Panel"]
 layout_mode = 0
@@ -42,23 +43,17 @@ scale = Vector2(0.6, 0.6)
 [node name="HBoxContainer" type="HBoxContainer" parent="Game/Panel/P1"]
 layout_mode = 2
 
-[node name="Node2D" parent="Game/Panel/P1/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(112, 162)
-
-[node name="Node2D2" parent="Game/Panel/P1/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(342, 162)
-
-[node name="Node2D3" parent="Game/Panel/P1/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(572, 162)
-
 [node name="P2_name" type="Label" parent="Game/Panel"]
+layout_mode = 0
 offset_left = 579.0
 offset_top = 168.0
 offset_right = 683.0
 offset_bottom = 191.0
 text = "User maybe ?"
+horizontal_alignment = 1
 
 [node name="P2" type="PanelContainer" parent="Game/Panel"]
+layout_mode = 0
 offset_left = 456.9
 offset_right = 1139.9
 offset_bottom = 326.0
@@ -67,23 +62,17 @@ scale = Vector2(0.5, 0.5)
 [node name="HBoxContainer" type="HBoxContainer" parent="Game/Panel/P2"]
 layout_mode = 2
 
-[node name="Node2D" parent="Game/Panel/P2/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(112, 162)
-
-[node name="Node2D2" parent="Game/Panel/P2/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(342, 162)
-
-[node name="Node2D3" parent="Game/Panel/P2/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(572, 162)
-
 [node name="P3_name" type="Label" parent="Game/Panel"]
+layout_mode = 0
 offset_left = 190.0
 offset_top = 366.0
 offset_right = 294.0
 offset_bottom = 389.0
 text = "User maybe ?"
+horizontal_alignment = 1
 
 [node name="P3" type="PanelContainer" parent="Game/Panel"]
+layout_mode = 0
 offset_left = 171.25
 offset_top = 218.85
 offset_right = 854.25
@@ -94,23 +83,17 @@ scale = Vector2(0.5, 0.5)
 [node name="HBoxContainer" type="HBoxContainer" parent="Game/Panel/P3"]
 layout_mode = 2
 
-[node name="Node2D" parent="Game/Panel/P3/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(112, 162)
-
-[node name="Node2D2" parent="Game/Panel/P3/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(342, 162)
-
-[node name="Node2D3" parent="Game/Panel/P3/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(572, 162)
-
 [node name="P3_name2" type="Label" parent="Game/Panel"]
+layout_mode = 0
 offset_left = 993.0
 offset_top = 360.0
 offset_right = 1097.0
 offset_bottom = 383.0
 text = "User maybe ?"
+horizontal_alignment = 1
 
 [node name="P4" type="PanelContainer" parent="Game/Panel"]
+layout_mode = 0
 offset_left = 1108.99
 offset_top = 546.13
 offset_right = 1791.99
@@ -121,15 +104,6 @@ scale = Vector2(0.5, 0.5)
 [node name="HBoxContainer" type="HBoxContainer" parent="Game/Panel/P4"]
 layout_mode = 2
 
-[node name="Node2D" parent="Game/Panel/P4/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(112, 162)
-
-[node name="Node2D2" parent="Game/Panel/P4/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(342, 162)
-
-[node name="Node2D3" parent="Game/Panel/P4/HBoxContainer" instance=ExtResource("2_5470g")]
-position = Vector2(572, 162)
-
 [node name="CardCount" type="Label" parent="Game/Panel"]
 layout_mode = 0
 offset_left = 272.0
@@ -137,6 +111,7 @@ offset_top = 535.0
 offset_right = 328.0
 offset_bottom = 558.0
 text = "Count: "
+horizontal_alignment = 1
 
 [node name="NewCard" type="PanelContainer" parent="Game/Panel"]
 layout_mode = 0
@@ -145,13 +120,20 @@ offset_top = 564.0
 offset_right = 352.0
 offset_bottom = 714.0
 
+[node name="Sprite2D" type="Sprite2D" parent="Game/Panel/NewCard"]
+position = Vector2(56.5, 73.5)
+scale = Vector2(0.5, 0.531847)
+texture = ExtResource("3_irrwt")
+
 [node name="ActiveCard" type="PanelContainer" parent="Game/Panel"]
+layout_mode = 0
 offset_left = 584.0
 offset_top = 279.0
 offset_right = 684.0
 offset_bottom = 439.0
 
 [node name="OldCard" type="PanelContainer" parent="Game/Panel"]
+layout_mode = 0
 offset_left = 77.0
 offset_top = -30.0
 offset_right = 177.0
@@ -159,6 +141,7 @@ offset_bottom = 130.0
 rotation = 0.785398
 
 [node name="Pause" type="Button" parent="Game/Panel"]
+layout_mode = 0
 offset_left = 1198.0
 offset_right = 1280.0
 offset_bottom = 46.0
@@ -244,6 +227,50 @@ text = "Back"
 [node name="Leave" type="Button" parent="Pause manu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Leave"
+
+[node name="Win" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Win"]
+layout_mode = 0
+offset_left = 603.0
+offset_top = 342.0
+offset_right = 670.0
+offset_bottom = 365.0
+text = "You won"
+
+[node name="Loss" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Loss"]
+layout_mode = 0
+offset_left = 603.0
+offset_top = 342.0
+offset_right = 670.0
+offset_bottom = 365.0
+text = "You Loss"
+
+[node name="Ended" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Ended"]
+layout_mode = 0
+offset_left = 603.0
+offset_top = 342.0
+offset_right = 670.0
+offset_bottom = 365.0
+text = "You did not loss or win"
 
 [connection signal="pressed" from="Game/Panel/Pause" to="." method="_on_pause_pressed"]
 [connection signal="pressed" from="PreGame/Pause" to="." method="_on_pause_pressed"]

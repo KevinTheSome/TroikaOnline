@@ -24,6 +24,13 @@ func join(code: String):
 
 func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	var json = JSON.parse_string(body.get_string_from_utf8())
+	for n in $MarginContainer/VBoxContainer/Lobbys/VBoxContainer.get_children():
+		$MarginContainer/VBoxContainer/Lobbys/VBoxContainer.remove_child(n)
+		n.queue_free()
+		
+	if (json == null):
+		return
+		
 	for lobby in json:
 		
 		var HBConteiner = HBoxContainer.new()

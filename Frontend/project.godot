@@ -22,7 +22,6 @@ config/icon="res://TroikaOnlineIcon.svg"
 [autoload]
 
 Global="*res://Global.gd"
-Card="*res://Card.gd"
 
 [display]
 

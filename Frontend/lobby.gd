@@ -4,6 +4,10 @@ var socket = WebSocketPeer.new()
 var lobbyInfo : Dictionary
 var lobbyCode : String = Global.lobby["code"]
 var gameStarted : bool = false
+var CardCount : int
+var AllCardDict : Dictionary = Global.CARDS
+
+
 
 func sendData(gameAction : String, data: Dictionary):
 	var dataString = JSON.stringify(data)
@@ -11,6 +15,24 @@ func sendData(gameAction : String, data: Dictionary):
 	
 func setMessage(message:String):
 	$Message.text = message
+	
+func Winner():
+	$Game.visible = false
+	$Win.visible = true
+	get_tree().create_timer(3.0).timeout
+	get_tree().change_scene_to_file("res://main_manu.tscn")
+	
+func Losser():
+	$Game.visible = false
+	$Loss.visible = true
+	get_tree().create_timer(3.0).timeout
+	get_tree().change_scene_to_file("res://main_manu.tscn")
+	
+func Ended():
+	$Game.visible = false
+	$Ended.visible = true
+	get_tree().create_timer(3.0).timeout
+	get_tree().change_scene_to_file("res://main_manu.tscn")
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -19,6 +41,9 @@ func _notification(what):
 	
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	for card in AllCardDict:
+		print(card)
+		
 	if Global.player["token"] == null || Global.player["token"] == "":
 		print("You need to log in")
 		
@@ -42,6 +67,11 @@ func _process(delta: float) -> void:
 	# Call this in _process or _physics_process. Data transfer and state updates
 	# will only happen when calling this function.
 	socket.poll()
+	
+	if($Game.visible == true):
+		if(CardCount <= 0 && CardCount != null):
+			$Game/Panel/NewCard.remove_child($Game/Panel/NewCard/Sprite2D)
+		$Game/Panel/P1_name.text = Global.player["username"]
 
 	# get_ready_state() tells you what state the socket is in.
 	var state = socket.get_ready_state()
@@ -86,18 +116,22 @@ func response_handeler(packet: String):
 		"End":
 			print("Lobby ended") #Game has ended
 			sendData("Leave",{"token":Global.player["token"] ,"username":Global.player["username"]})
+			gameStarted = false
 			Global.lobby["code"] = ""
 			get_tree().change_scene_to_file("res://main_manu.tscn")
 			
 		"GameTurn":
 			print(packet)
+			CardCount = responseObj["data"]["deckSize"]
+			$Game/Panel/CardCount.text = "Count: " + str(CardCount)
 			
 		"Error":
 			setMessage(responseObj["data"]["message"])
 			
 			
 		"Test":
-			print("Test " + packet)
+			print("Test data: " + packet)
+			
 		_: #Defualt
 			print(packet)
 	

@@ -7,43 +7,57 @@ export class Game {
     deck: Card[] = Deck.getFullCardDeck();
     activeDeck: Card[] = [];
     playedDeck: Card[] = [];
-    winner: string = "";
+    winner: Player | null = null;
 
-    activePlayer: string = "";
-    players: string[] = [];
+    activePlayer: Player | null = null;
+    players: Array<Player> = [];
     status: EStatus = EStatus.STARTED
 
     constructor(
         public lobbycode: string,
-        public playerArr: string[]
+        public playerArr: Player[]
     )
     {
-        this.players = this.playerArr
+        playerArr.forEach(p => {
+            this.players.push(p)
+        });
     }
 
-    public updatePlayerArr(parr: string[]){
+    public updatePlayerArr(parr: Array<Player>){
         this.players = parr
     }
 
-    private startGame() { //todo make it workd
-        this.status = EStatus.STARTED
-        this.activePlayer = this.players[0]
+    public startGame() {
+        this.status = EStatus.STARTED;
+        this.activePlayer = this.players[0];
+
+        // Deal 6 cards to each player
+        const { arrayOfDealtCards, remainingCards } = Deck.dealCards(6, this.players.length);
+
+        // Assign the dealt cards to each player
+        arrayOfDealtCards.forEach((cards, index) => {
+            this.players[index].cards = cards;
+        });
+
+        // Update the deck with the remaining cards
+        this.deck = remainingCards;
+
         return {
             deckSize: this.deck.length,
-            card: Deck.dealCards(6, this.players.length)
-        }
+            players: this.players
+        };
     }
 
-    private winGame(player: string) {
+    private winGame(player: Player) {
         return JSON.stringify({message: player + " has won!" , error: ""})
     }
 
-    private endGame(player: string) {
+    private endGame(player: Player) {
         this.status = EStatus.FINISHED
         return JSON.stringify({message: player + " has lost!" , error: ""})
     }
 
-    public move(playedCard: Card, player: string, cardCount: number) {
+    public move(playedCard: Card, player: Player, cardCount: number) {
         if(this.status != EStatus.STARTED){
             return JSON.stringify({message: "Game is not started" , error: "Game is not started"})
         }
@@ -52,9 +66,9 @@ export class Game {
             return JSON.stringify({message: "All fields are required" , error: "All fields are required error"})
         }
 
-        if(!this.players.includes(player)){
-            return JSON.stringify({message: "Player is not in the game" , error: "Player is not in the game error"})
-        }
+        // if(!this.players.includes(player)){
+        //     return JSON.stringify({message: "Player is not in the game" , error: "Player is not in the game error"})
+        // }
 
         if(this.playedDeck.includes(playedCard)){
             return JSON.stringify({message: "Card is already played" , error: "Card is already played error"})
@@ -67,7 +81,7 @@ export class Game {
         }
 
         if(this.activeDeck.length <= 0 && cardCount <= 0){  //win condition
-            if(this.winner != "" ){
+            if(this.winner != null ){
                 return
             }
             this.winner = player
@@ -102,6 +116,42 @@ export class Game {
         return JSON.stringify({message: "Card played" , error: ""})
 
 
+    }
+}
+
+export class Player {
+    name: string;
+    cards: Card[];
+
+    constructor(name: string) {
+        this.name = name;
+        this.cards = [];
+    }
+
+    addCard(card: Card): void {
+        this.cards.push(card);
+    }
+
+    removeCard(card: Card): void {
+        const index = this.cards.indexOf(card);
+        if (index !== -1) {
+            this.cards.splice(index, 1);
+        } else {
+            console.log(`Card ${card} not found in ${this.name}'s hand.`);
+        }
+    }
+
+    showCards(): void {
+        if (this.cards.length > 0) {
+            console.log(`${this.name}'s cards: ${this.cards.join(', ')}`);
+        } else {
+            console.log(`${this.name} has no cards.`);
+        }
+    }
+
+
+    clearCards(): void {
+        this.cards = [];
     }
 }
 

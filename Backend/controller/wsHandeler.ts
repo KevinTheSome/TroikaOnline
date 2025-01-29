@@ -1,7 +1,6 @@
 import { Context } from "hono";
 import { SqlDataBase } from "../db/dbClass.ts";
-import { Player } from "../types/Player.ts";
-import { Game } from "../controller/GameLogic.ts";
+import { Game, Player } from "../controller/GameLogic.ts";
 import { WSContext } from "hono/ws";
 
 
@@ -9,17 +8,17 @@ export class wsHandeler {
     private playerList = new Map<string, [WSContext | undefined, string | undefined]>()
     private gameList = new Map<string, Game>()
 
-    private GetPLayersInLobby(lobbyCode: string): string[] {
-        const players: string[] = []
+    private GetPLayersInLobby(lobbyCode: string): Player[] {
+        const players: Player[] = []
         for (const [playerName, playerData] of this.playerList.entries()) {   //I love ai ;3
             if (playerData[1] === lobbyCode) {
-                players.push(playerName)
+                players.push(new Player(playerName))
             }
         }
         return players  
     }
 
-    private sendToLobby(gameState: string, data: string|object,lobbyCode: string){
+    private sendToLobby(gameState: string, data: string|object|undefined,lobbyCode: string){
         for (const [_playerName, playerData] of this.playerList.entries()) {   //I love ai ;3
             if (playerData[1] === lobbyCode) {
                 console.log("sent: " + JSON.stringify({gameState: gameState, data: data} + " to " + lobbyCode))
@@ -67,14 +66,17 @@ export class wsHandeler {
                 this.sendToLobby("LobbyUpdate", {"type": "Leave" , "username": clientData["username"]} , lobbyCode)
 
                 db.updateLobby(lobbyCode, lobby[0].players - 1, lobby[0].public)
-                if(db.getLobby(lobbyCode)[0].players == 0){ //go f yourself TS 
+                // @ts-ignore:idk but it just works and I hate seeing a error
+                if(db.getLobby(lobbyCode)[0].players == 0){
                     db.delLobby(lobbyCode)
                 }
                 break;
             case "Start":
                 this.sendToLobby("Start", {"message": "Game started"} , lobbyCode)
-                this.gameList.set(lobbyCode, new Game(lobbyCode,this.GetPLayersInLobby(lobbyCode)))
+                this.gameList.set(lobbyCode, new Game(lobbyCode, this.GetPLayersInLobby(lobbyCode)))
                 db.delLobby(lobbyCode)
+                
+                this.sendToLobby("GameTurn", this.gameList.get(lobbyCode)?.startGame() , lobbyCode)
                 console.log(this.gameList)
                 break;
             case "End":

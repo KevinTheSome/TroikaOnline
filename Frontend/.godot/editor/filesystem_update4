@@ -8,3 +8,6 @@ res://settings_manu.tscn
 res://create_lobby.tscn
 res://placeHolderCard.tscn
 res://Card.gd
+res://join_lobby.gd
+res://create_lobby.gd
+res://Global.gd

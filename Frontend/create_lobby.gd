@@ -5,7 +5,7 @@ var headers = ["Content-Type: application/json"]
 
 func createLobby():
 	$HTTPRequest.request("http://127.0.0.1:8000/lobby/new", headers, HTTPClient.METHOD_POST,JSON.stringify({"pBool": privat}))
-	print("lobby made")
+	
 	
 func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	var json = JSON.parse_string(body.get_string_from_utf8())
