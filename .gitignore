@@ -1,3 +1,4 @@
 /.DS_Store
 /Backend/db/db.db
 /Backend/.env
+/Frontend/.godot/
