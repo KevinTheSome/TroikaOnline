@@ -32,7 +32,7 @@ export async function newLobbbyRoute(ctx: Context , db: SqlDataBase){
     }
 
     console.log("New lobby created: " + code)
-    return ctx.json({message: "Lobby created" , error: ""})
+    return ctx.json({message: "Lobby created", code:code , error: ""})
 }
 
 export async function joinLobbbyRoute(ctx: Context,db: SqlDataBase){

@@ -4,6 +4,7 @@ var player : Dictionary = {"username": "" , "token": "" , "wins": 0 ,"losses":0}
 var lobby : Dictionary = {"code":""}
 
 const CARDS = {
+	"":["res://Playing Cards/back.png"], #2
 	"2C":["res://Playing Cards/2C.png"], #2
 	"2D":["res://Playing Cards/2D.png"],
 	"2H":["res://Playing Cards/2H.png"],

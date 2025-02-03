@@ -50,6 +50,7 @@ func _ready() -> void:
 	if Global.lobby["code"] == "" || Global.player["token"] == null:
 		print("Code is not defined")
 	
+	$PreGame/Label.text = Global.lobby["code"]
 	var err = socket.connect_to_url("ws://127.0.0.1:8000/ws/" + lobbyCode)
 	if err != OK:
 		print("Unable to connect")	
@@ -182,11 +183,23 @@ func first_cards(player:Dictionary) ->void:
 
 		code = code.to_upper()
 		playerCards.append(code)
-	
+	var i = 1
+	var x_offset = 0
 	for card in playerCards:
 		var newCard = cardScene.instantiate()
-		newCard.set_image(Global.CARDS[card])
+		newCard.position.y = 170
+		newCard.position.x = 120 + (200 * x_offset)
+		if i <= 3:
+			newCard.set_image(Global.CARDS[""])
+			if i == 3:
+				x_offset = -1
+		else:	
+			
+			newCard.position.y = 140
+			newCard.set_image(Global.CARDS[card])
 		$Game/Panel/P1/HBoxContainer.add_child(newCard) 
+		i = i + 1
+		x_offset = x_offset + 1
 	print(playerCards)
 
 

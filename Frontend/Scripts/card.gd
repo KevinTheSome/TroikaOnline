@@ -2,7 +2,7 @@ extends Node2D
 
 
 func set_image(image) -> void:
-	$CardImage.texture = load(str(image[0]))
+		$CardImage.texture = load(str(image[0]))
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

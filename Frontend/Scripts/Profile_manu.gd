@@ -9,7 +9,7 @@ var pToken
 var headers = ["Content-Type: application/json"]
 
 func debugPrint(veriable) -> void:
-	print(veriable)
+	pass
 
 func printToMessage(veriable:String) -> void:
 	$MarginContainer/VBoxContainer/Message.text = veriable
