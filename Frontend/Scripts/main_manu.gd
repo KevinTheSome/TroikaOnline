@@ -16,12 +16,12 @@ func _process(delta: float) -> void:
 	$gameName.rotation = delta + $gameName.rotation
 
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://mode_swiche.tscn")
+	get_tree().change_scene_to_file("res://Scenes/mode_swiche.tscn")
 
 
 
 func _on_settings_pressed() -> void:
-	get_tree().change_scene_to_file("res://settings_manu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/settings_manu.tscn")
 
 
 
@@ -30,4 +30,4 @@ func _on_quit_pressed() -> void:
 
 
 func _on_profile_pressed() -> void:
-	get_tree().change_scene_to_file("res://ProfileSettings_manu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/ProfileSettings_manu.tscn")

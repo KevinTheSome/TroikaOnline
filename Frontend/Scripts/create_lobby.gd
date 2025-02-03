@@ -15,7 +15,7 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 		print(json["message"])
 
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://mode_swiche.tscn")
+	get_tree().change_scene_to_file("res://Scenes/mode_swiche.tscn")
 
 
 func _on_create_lobby_pressed() -> void:

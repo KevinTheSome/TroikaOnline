@@ -6,6 +6,9 @@ var lobbyCode : String = Global.lobby["code"]
 var gameStarted : bool = false
 var CardCount : int
 var AllCardDict : Dictionary = Global.CARDS
+var players : Array
+var turns : Dictionary
+var cardScene
 
 
 
@@ -20,19 +23,19 @@ func Winner():
 	$Game.visible = false
 	$Win.visible = true
 	get_tree().create_timer(3.0).timeout
-	get_tree().change_scene_to_file("res://main_manu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main_manu.tscn")
 	
 func Losser():
 	$Game.visible = false
 	$Loss.visible = true
 	get_tree().create_timer(3.0).timeout
-	get_tree().change_scene_to_file("res://main_manu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main_manu.tscn")
 	
 func Ended():
 	$Game.visible = false
 	$Ended.visible = true
 	get_tree().create_timer(3.0).timeout
-	get_tree().change_scene_to_file("res://main_manu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main_manu.tscn")
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -41,9 +44,6 @@ func _notification(what):
 	
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	for card in AllCardDict:
-		print(card)
-		
 	if Global.player["token"] == null || Global.player["token"] == "":
 		print("You need to log in")
 		
@@ -60,6 +60,7 @@ func _ready() -> void:
 
 		# Send data.
 		sendData("Login",{"token":Global.player["token"] ,"username":Global.player["username"]})
+	cardScene = preload("res://Scenes/card.tscn")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -68,10 +69,7 @@ func _process(delta: float) -> void:
 	# will only happen when calling this function.
 	socket.poll()
 	
-	if($Game.visible == true):
-		if(CardCount <= 0 && CardCount != null):
-			$Game/Panel/NewCard.remove_child($Game/Panel/NewCard/Sprite2D)
-		$Game/Panel/P1_name.text = Global.player["username"]
+			
 
 	# get_ready_state() tells you what state the socket is in.
 	var state = socket.get_ready_state()
@@ -118,12 +116,20 @@ func response_handeler(packet: String):
 			sendData("Leave",{"token":Global.player["token"] ,"username":Global.player["username"]})
 			gameStarted = false
 			Global.lobby["code"] = ""
-			get_tree().change_scene_to_file("res://main_manu.tscn")
+			get_tree().change_scene_to_file("res://Scenes/main_manu.tscn")
 			
 		"GameTurn":
-			print(packet)
 			CardCount = responseObj["data"]["deckSize"]
+			players = responseObj["data"]["players"]
+			turns = responseObj["data"]["order"]
+			
+			#print(responseObj["data"])
+			for player in players:
+				print(player["name"])
+				first_cards(player)
+			
 			$Game/Panel/CardCount.text = "Count: " + str(CardCount)
+			set_Labels(turns)
 			
 		"Error":
 			setMessage(responseObj["data"]["message"])
@@ -161,6 +167,44 @@ func _on_pause_pressed() -> void:
 		$PreGame.visible = false
 		$"Pause manu".visible = true
 
+func first_cards(player:Dictionary) ->void:
+	var playerName = player["name"]
+	var playerCards:Array
+	
+	for card in player["cards"]:
+		var code:String
+		if card["value"].length() == 2:
+			code = card["value"].left(2)
+			code += card["suit"].left(1)
+		else:
+			code = card["value"].left(1)
+			code += card["suit"].left(1)
+
+		code = code.to_upper()
+		playerCards.append(code)
+	
+	for card in playerCards:
+		var newCard = cardScene.instantiate()
+		newCard.set_image(Global.CARDS[card])
+		$Game/Panel/P1/HBoxContainer.add_child(newCard) 
+	print(playerCards)
+
+
+func set_Labels(players:Dictionary) -> void:
+	match players.size():
+		2:
+			$Game/Panel/P1_name.text = players["0"]
+			$Game/Panel/P2_name.text = players["1"]
+		3:
+			$Game/Panel/P1_name.text = players["0"]
+			$Game/Panel/P2_name.text = players["1"]
+			$Game/Panel/P3_name.text = players["2"]
+		4:
+			$Game/Panel/P1_name.text = players["0"]
+			$Game/Panel/P2_name.text = players["1"]
+			$Game/Panel/P3_name.text = players["2"]
+			$Game/Panel/P4_name.text = players["3"]
+	
 
 func _on_back_pressed() -> void:
 	if(gameStarted == true):
@@ -174,4 +218,4 @@ func _on_back_pressed() -> void:
 func _on_leave_pressed() -> void:
 	sendData("Leave",{"token":Global.player["token"] ,"username":Global.player["username"]})
 	Global.lobby["code"] = ""
-	get_tree().change_scene_to_file("res://main_manu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main_manu.tscn")

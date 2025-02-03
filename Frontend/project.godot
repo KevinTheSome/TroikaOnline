@@ -15,7 +15,7 @@ config/name_localized={
 "en": ""
 }
 config/description="This is a multiplayer card game named \"troika\" or in english called \"shithed\""
-run/main_scene="res://main_manu.tscn"
+run/main_scene="res://Scenes/main_manu.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://TroikaOnlineIcon.svg"
 

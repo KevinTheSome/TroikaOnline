@@ -8,6 +8,7 @@ export class Game {
     activeDeck: Card[] = [];
     playedDeck: Card[] = [];
     winner: Player | null = null;
+    order: object = {};
 
     activePlayer: Player | null = null;
     players: Array<Player> = [];
@@ -21,6 +22,9 @@ export class Game {
         playerArr.forEach(p => {
             this.players.push(p)
         });
+        this.players.forEach((player, index) => {
+            this.order[String(index)] = player["name"];
+        });
     }
 
     public updatePlayerArr(parr: Array<Player>){
@@ -32,7 +36,8 @@ export class Game {
         this.activePlayer = this.players[0];
 
         // Deal 6 cards to each player
-        const { arrayOfDealtCards, remainingCards } = Deck.dealCards(6, this.players.length);
+        const { arrayOfDealtCards, remainingCards } = Deck.dealCards(9, this.players.length);
+
 
         // Assign the dealt cards to each player
         arrayOfDealtCards.forEach((cards, index) => {
@@ -43,8 +48,10 @@ export class Game {
         this.deck = remainingCards;
 
         return {
+            order: this.order,
             deckSize: this.deck.length,
-            players: this.players
+            players: this.players,
+            turn: this.activePlayer
         };
     }
 

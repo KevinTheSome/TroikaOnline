@@ -5,14 +5,14 @@ import { WSContext } from "hono/ws";
 
 
 export class wsHandeler {
-    private playerList = new Map<string, [WSContext | undefined, string | undefined]>()
+    private playerList = new Map<string, [WSContext | undefined, string | undefined, string | undefined]>()
     private gameList = new Map<string, Game>()
 
     private GetPLayersInLobby(lobbyCode: string): Player[] {
         const players: Player[] = []
         for (const [playerName, playerData] of this.playerList.entries()) {   //I love ai ;3
             if (playerData[1] === lobbyCode) {
-                players.push(new Player(playerName))
+                players.push(new Player(playerData[2]!))
             }
         }
         return players  
@@ -57,7 +57,7 @@ export class wsHandeler {
         switch (message["gameAction"]) {
             case "Login":
                 console.log("Login from: " + clientData.token + " username: " + clientData.username)
-                this.playerList.set(clientData["token"], [ws, lobbyCode])
+                this.playerList.set(clientData["token"], [ws, lobbyCode, clientData["username"]])
                 db.updateLobby(lobbyCode, lobby[0].players + 1, lobby[0].public)
                 this.sendToLobby("LobbyUpdate", {"type": "Login" , "username": clientData["username"]} , lobbyCode)
                 break;

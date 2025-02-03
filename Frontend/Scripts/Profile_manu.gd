@@ -31,7 +31,7 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 		printToMessage("There was a error: " + json["message"])
 
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://main_manu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main_manu.tscn")
 
 
 func _on_register_pressed() -> void:

@@ -3,11 +3,14 @@ extends Control
 var headers = ["Content-Type: application/json"]
 var join_string
 
+func _ready() -> void:
+	var response = $HTTPRequest.request("http://127.0.0.1:8000/explor", headers, HTTPClient.METHOD_GET)
+
 func _on_lobby_code_text_changed() -> void:
 	join_string = $MarginContainer/VBoxContainer/HBoxContainer/Lobby_code.text
 
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://mode_swiche.tscn")
+	get_tree().change_scene_to_file("res://Scenes/mode_swiche.tscn")
 	
 func _on_refresh_pressed() -> void:
 	var response = $HTTPRequest.request("http://127.0.0.1:8000/explor", headers, HTTPClient.METHOD_GET)
@@ -18,7 +21,7 @@ func _on_join_lobby_pressed() -> void:
 func join(code: String):
 	print(code)
 	Global.lobby["code"] = code
-	get_tree().change_scene_to_file("res://lobby.tscn")
+	get_tree().change_scene_to_file("res://Scenes/lobby.tscn")
 	
 
 
@@ -49,7 +52,7 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 		HBConteiner.add_child(playerLabel)
 		HBConteiner.add_child(joinButton)
 		$MarginContainer/VBoxContainer/Lobbys/VBoxContainer.add_child(HBConteiner)
-		print(lobby)
+		#print(lobby)
 
 func _button_pressed(code):
 	join(code)
