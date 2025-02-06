@@ -36,12 +36,12 @@ export class Game {
         this.activePlayer = this.players[0];
 
         // Deal 6 cards to each player
-        const { arrayOfDealtCards, remainingCards } = Deck.dealCards(9, this.players.length);
+        const { arrayOfDealtCards, remainingCards } = Deck.dealCards(6, this.players.length);
 
 
         // Assign the dealt cards to each player
         arrayOfDealtCards.forEach((cards, index) => {
-            this.players[index].cards = cards;
+            this.players[index].addFirstCard(cards);
         });
 
         // Update the deck with the remaining cards
@@ -128,37 +128,43 @@ export class Game {
 
 export class Player {
     name: string;
-    cards: Card[];
+    cardsInHand: Card[];
+    cardsUp: Card[];
+    cardsDown: Card[];
 
     constructor(name: string) {
         this.name = name;
-        this.cards = [];
+        this.cardsInHand = [];
+        this.cardsUp = [];
+        this.cardsDown = [];
     }
 
-    addCard(card: Card): void {
-        this.cards.push(card);
+    addFirstCard(cards: Card[]): void {
+        cards.forEach((card,index) => {
+            if(index <= 2){
+                this.cardsDown = [...this.cardsDown, card]
+            }if (index > 2 && index <= 5) {
+                this.cardsUp = [...this.cardsUp, card]
+            } else {
+                this.cardsInHand = [...this.cardsInHand, card]
+            }
+        })
     }
 
     removeCard(card: Card): void {
-        const index = this.cards.indexOf(card);
+        const index = this.cardsInHand.indexOf(card);
         if (index !== -1) {
-            this.cards.splice(index, 1);
+            this.cardsInHand.splice(index, 1);
         } else {
             console.log(`Card ${card} not found in ${this.name}'s hand.`);
         }
     }
 
-    showCards(): void {
-        if (this.cards.length > 0) {
-            console.log(`${this.name}'s cards: ${this.cards.join(', ')}`);
-        } else {
-            console.log(`${this.name} has no cards.`);
-        }
-    }
-
 
     clearCards(): void {
-        this.cards = [];
+        this.cardsInHand = [];
+        this.cardsUp = [];
+        this.cardsDown = [];
     }
 }
 
