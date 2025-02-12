@@ -29,7 +29,6 @@ offset_left = 578.0
 offset_top = 488.0
 offset_right = 682.0
 offset_bottom = 511.0
-text = "User maybe ?"
 horizontal_alignment = 1
 
 [node name="P1" type="PanelContainer" parent="Game/Panel"]
@@ -49,7 +48,6 @@ offset_left = 579.0
 offset_top = 168.0
 offset_right = 683.0
 offset_bottom = 191.0
-text = "User maybe ?"
 horizontal_alignment = 1
 
 [node name="P2" type="PanelContainer" parent="Game/Panel"]
@@ -68,7 +66,6 @@ offset_left = 190.0
 offset_top = 366.0
 offset_right = 294.0
 offset_bottom = 389.0
-text = "User maybe ?"
 horizontal_alignment = 1
 
 [node name="P3" type="PanelContainer" parent="Game/Panel"]
@@ -83,13 +80,12 @@ scale = Vector2(0.5, 0.5)
 [node name="HBoxContainer" type="HBoxContainer" parent="Game/Panel/P3"]
 layout_mode = 2
 
-[node name="P3_name2" type="Label" parent="Game/Panel"]
+[node name="P4_name" type="Label" parent="Game/Panel"]
 layout_mode = 0
 offset_left = 993.0
 offset_top = 360.0
 offset_right = 1097.0
 offset_bottom = 383.0
-text = "User maybe ?"
 horizontal_alignment = 1
 
 [node name="P4" type="PanelContainer" parent="Game/Panel"]

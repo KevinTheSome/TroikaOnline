@@ -124,26 +124,41 @@ func response_handeler(packet: String):
 			players = responseObj["data"]["players"]
 			turns = responseObj["data"]["order"]
 			
-			match players.size():
+			
+			var newTurns = {"0": Global.player["username"]}  # Start with the current player at key "0"
+			var index = 1  # Start indexing other players from 1
+
+			for key in turns:
+				if turns[key] != Global.player["username"]:  # Skip the current player
+					newTurns[str(index)] = turns[key]  # Add the rest of the players
+					index += 1
+
+			# Replace the original `turns` dictionary with the reordered one
+			turns = newTurns
+			
+			print(turns)
+			match turns.size():
 				1:
-					first_cards_player(players[0])
-				2:
-					players[0]
-					players[1]
-				3:
-					players[0]
-					players[1]
-					players[2]
-				4:
-					players[0]
-					players[1]
-					players[2]
-					players[3]
+					first_cards_player(turns["0"])
+					set_Labels(turns["0"],0)
 					
-				
+				2:
+					first_cards_player(turns["0"])
+					set_Labels(turns["0"],0)
+					set_Labels(turns["1"],1)
+				3:
+					first_cards_player(turns["0"])
+					set_Labels(turns["0"],0)
+					set_Labels(turns["1"],1)
+					set_Labels(turns["2"],2)
+				4:
+					first_cards_player(turns["0"])
+					set_Labels(turns["0"],0)
+					set_Labels(turns["1"],1)
+					set_Labels(turns["2"],2)
+					set_Labels(turns["3"],3)
 			
 			$Game/Panel/CardCount.text = "Count: " + str(CardCount)
-			set_Labels(turns)
 			
 		"Error":
 			setMessage(responseObj["data"]["message"])
@@ -190,12 +205,16 @@ func generate_card_code(card: Dictionary) -> String:
 	code += card["suit"].left(1)
 	return code.to_upper()
 
-func first_cards_player(player: Dictionary) -> void:
+func first_cards_player(turn) -> void:
+	var curP
+	for player in players:
+		if player["name"] == turn:
+			curP = player
 	
-	var playerName = player["name"]
-	var faceDownCards: Array = player["cardsDown"]
-	var faceUpCards: Array = player["cardsUp"]
-	var handCards: Array = player["cardsInHand"]
+	var playerName = curP["name"]
+	var faceDownCards: Array = curP["cardsDown"]
+	var faceUpCards: Array = curP["cardsUp"]
+	var handCards: Array = curP["cardsInHand"]
 	if(playerName != Global.player["username"]):
 		pass
 	# Generate card codes for face-down cards
@@ -236,154 +255,12 @@ func first_cards_player(player: Dictionary) -> void:
 		i += 1
 		x_offset += 1
 
-func secend_cards_player(player: Dictionary) -> void:
-	var playerName = player["name"]
-	var faceDownCards: Array = player["cardsDown"]
-	var faceUpCards: Array = player["cardsUp"]
-	var handCards: Array = player["cardsInHand"]
 
-	# Generate card codes for face-down cards
-	var faceDownCodes: Array = []
-	for card in faceDownCards:
-		faceDownCodes.append(generate_card_code(card))
-
-	# Generate card codes for face-up cards
-	var faceUpCodes: Array = []
-	for card in faceUpCards:
-		faceUpCodes.append(generate_card_code(card))
-
-	# Generate card codes for hand cards
-	var handCodes: Array = []
-	for card in handCards:
-		handCodes.append(generate_card_code(card))
-
-	# Instantiate and position cards
-	var i = 1
-	var x_offset = 0
-	for card_code in faceDownCodes:
-		var newCard = cardScene.instantiate()
-		newCard.position.y = 190
-		newCard.position.x = 120 + (220 * x_offset)
-		newCard.set_image(Global.CARDS[""])  # Assuming this sets a default/blank card image
-		$Game/Panel/P1/HBoxContainer.add_child(newCard)
-		i += 1
-		x_offset += 1
-		
-	i = 1
-	x_offset = 0
-	for card_code in faceUpCodes:
-		var newCard = cardScene.instantiate()
-		newCard.position.y = 160
-		newCard.position.x = 120 + (220 * x_offset)
-		newCard.set_image(Global.CARDS[card_code])
-		$Game/Panel/P1/HBoxContainer.add_child(newCard)
-		i += 1
-		x_offset += 1
-
-func therd_cards_player(player: Dictionary) -> void:
-	var playerName = player["name"]
-	var faceDownCards: Array = player["cardsDown"]
-	var faceUpCards: Array = player["cardsUp"]
-	var handCards: Array = player["cardsInHand"]
-
-	# Generate card codes for face-down cards
-	var faceDownCodes: Array = []
-	for card in faceDownCards:
-		faceDownCodes.append(generate_card_code(card))
-
-	# Generate card codes for face-up cards
-	var faceUpCodes: Array = []
-	for card in faceUpCards:
-		faceUpCodes.append(generate_card_code(card))
-
-	# Generate card codes for hand cards
-	var handCodes: Array = []
-	for card in handCards:
-		handCodes.append(generate_card_code(card))
-
-	# Instantiate and position cards
-	var i = 1
-	var x_offset = 0
-	for card_code in faceDownCodes:
-		var newCard = cardScene.instantiate()
-		newCard.position.y = 190
-		newCard.position.x = 120 + (220 * x_offset)
-		newCard.set_image(Global.CARDS[""])  # Assuming this sets a default/blank card image
-		$Game/Panel/P1/HBoxContainer.add_child(newCard)
-		i += 1
-		x_offset += 1
-		
-	i = 1
-	x_offset = 0
-	for card_code in faceUpCodes:
-		var newCard = cardScene.instantiate()
-		newCard.position.y = 160
-		newCard.position.x = 120 + (220 * x_offset)
-		newCard.set_image(Global.CARDS[card_code])
-		$Game/Panel/P1/HBoxContainer.add_child(newCard)
-		i += 1
-		x_offset += 1
-		
-func forth_cards_player(player: Dictionary) -> void:
-	var playerName = player["name"]
-	var faceDownCards: Array = player["cardsDown"]
-	var faceUpCards: Array = player["cardsUp"]
-	var handCards: Array = player["cardsInHand"]
-
-	# Generate card codes for face-down cards
-	var faceDownCodes: Array = []
-	for card in faceDownCards:
-		faceDownCodes.append(generate_card_code(card))
-
-	# Generate card codes for face-up cards
-	var faceUpCodes: Array = []
-	for card in faceUpCards:
-		faceUpCodes.append(generate_card_code(card))
-
-	# Generate card codes for hand cards
-	var handCodes: Array = []
-	for card in handCards:
-		handCodes.append(generate_card_code(card))
-
-	# Instantiate and position cards
-	var i = 1
-	var x_offset = 0
-	for card_code in faceDownCodes:
-		var newCard = cardScene.instantiate()
-		newCard.position.y = 190
-		newCard.position.x = 120 + (220 * x_offset)
-		newCard.set_image(Global.CARDS[""])  # Assuming this sets a default/blank card image
-		$Game/Panel/P1/HBoxContainer.add_child(newCard)
-		i += 1
-		x_offset += 1
-		
-	i = 1
-	x_offset = 0
-	for card_code in faceUpCodes:
-		var newCard = cardScene.instantiate()
-		newCard.position.y = 160
-		newCard.position.x = 120 + (220 * x_offset)
-		newCard.set_image(Global.CARDS[card_code])
-		$Game/Panel/P1/HBoxContainer.add_child(newCard)
-		i += 1
-		x_offset += 1
-
-func set_Labels(players: Dictionary) -> void:
-	# Set the label for the current player
-	$Game/Panel/P1_name.text = Global.player["username"]
-
-	# Remove the current player from the temp_players dictionary
-	var temp_players = players.duplicate()  # Create a copy of the players dictionary
-	temp_players.erase(Global.player["username"])  # Remove the current player
-
-	# Iterate over the remaining players and set their labels
-	var index = 2  # Start from P2 since P1 is already set
-	for player_name in temp_players.values():
-		var label_path = "Game/Panel/P" + str(index) + "_name"
-		var label = get_node(label_path)
-		if label:
-			label.text = player_name
-		index += 1
+func set_Labels(name:String,turn:int) -> void:
+	var label_path = "Game/Panel/P" + str(turn + 1) + "_name"
+	var label = get_node(label_path)
+	if label:
+		label.text = name
 
 func _on_back_pressed() -> void:
 	if(gameStarted == true):
