@@ -139,20 +139,26 @@ func response_handeler(packet: String):
 			print(turns)
 			match turns.size():
 				1:
-					first_cards_player(turns["0"])
+					cards_player(turns["0"],0)
 					set_Labels(turns["0"],0)
 					
 				2:
-					first_cards_player(turns["0"])
+					cards_player(turns["0"],0)
+					cards_player(turns["1"],1)
 					set_Labels(turns["0"],0)
 					set_Labels(turns["1"],1)
 				3:
-					first_cards_player(turns["0"])
+					cards_player(turns["0"],0)
+					cards_player(turns["1"],1)
+					cards_player(turns["2"],2)
 					set_Labels(turns["0"],0)
 					set_Labels(turns["1"],1)
 					set_Labels(turns["2"],2)
 				4:
-					first_cards_player(turns["0"])
+					cards_player(turns["0"],0)
+					cards_player(turns["1"],1)
+					cards_player(turns["2"],2)
+					cards_player(turns["3"],3)
 					set_Labels(turns["0"],0)
 					set_Labels(turns["1"],1)
 					set_Labels(turns["2"],2)
@@ -205,20 +211,21 @@ func generate_card_code(card: Dictionary) -> String:
 	code += card["suit"].left(1)
 	return code.to_upper()
 
-func first_cards_player(turn) -> void:
+func cards_player(p,turn) -> void:
+	
 	var curP
 	for player in players:
-		if player["name"] == turn:
+		if player["name"] == p:
 			curP = player
 	
 	var playerName = curP["name"]
 	var faceDownCards: Array = curP["cardsDown"]
 	var faceUpCards: Array = curP["cardsUp"]
 	var handCards: Array = curP["cardsInHand"]
-	if(playerName != Global.player["username"]):
-		pass
-	# Generate card codes for face-down cards
 	var faceDownCodes: Array = []
+	var i = 1
+	var x_offset = 0
+	
 	for card in faceDownCards:
 		faceDownCodes.append(generate_card_code(card))
 
@@ -231,29 +238,88 @@ func first_cards_player(turn) -> void:
 	var handCodes: Array = []
 	for card in handCards:
 		handCodes.append(generate_card_code(card))
-
-	# Instantiate and position cards
-	var i = 1
-	var x_offset = 0
-	for card_code in faceDownCodes:
-		var newCard = cardScene.instantiate()
-		newCard.position.y = 190
-		newCard.position.x = 120 + (220 * x_offset)
-		newCard.set_image(Global.CARDS[""])  # Assuming this sets a default/blank card image
-		$Game/Panel/P1/HBoxContainer.add_child(newCard)
-		i += 1
-		x_offset += 1
 		
-	i = 1
-	x_offset = 0
-	for card_code in faceUpCodes:
-		var newCard = cardScene.instantiate()
-		newCard.position.y = 160
-		newCard.position.x = 120 + (220 * x_offset)
-		newCard.set_image(Global.CARDS[card_code])
-		$Game/Panel/P1/HBoxContainer.add_child(newCard)
-		i += 1
-		x_offset += 1
+	match turn:
+		0:
+			for card_code in faceDownCodes:
+				var newCard = cardScene.instantiate()
+				newCard.position.y = 190
+				newCard.position.x = 120 + (220 * x_offset)
+				newCard.set_image(Global.CARDS[""])  # Assuming this sets a default/blank card image
+				$Game/Panel/P1/HBoxContainer.add_child(newCard)
+				i += 1
+				x_offset += 1
+				
+			i = 1
+			x_offset = 0
+			for card_code in faceUpCodes:
+				var newCard = cardScene.instantiate()
+				newCard.position.y = 160
+				newCard.position.x = 120 + (220 * x_offset)
+				newCard.set_image(Global.CARDS[card_code])
+				$Game/Panel/P1/HBoxContainer.add_child(newCard)
+				i += 1
+				x_offset += 1
+		1:
+			for card_code in faceDownCodes:
+				var newCard = cardScene.instantiate()
+				newCard.position.y = 160
+				newCard.position.x = 120 + (220 * x_offset)
+				newCard.set_image(Global.CARDS[""])  # Assuming this sets a default/blank card image
+				$Game/Panel/P2/HBoxContainer.add_child(newCard)
+				i += 1
+				x_offset += 1
+				
+			i = 1
+			x_offset = 0
+			for card_code in faceUpCodes:
+				var newCard = cardScene.instantiate()
+				newCard.position.y = 180
+				newCard.position.x = 120 + (220 * x_offset)
+				newCard.set_image(Global.CARDS[card_code])
+				$Game/Panel/P2/HBoxContainer.add_child(newCard)
+				i += 1
+				x_offset += 1
+		2:
+			for card_code in faceDownCodes:
+				var newCard = cardScene.instantiate()
+				newCard.position.y = 180
+				newCard.position.x = 120 + (220 * x_offset)
+				newCard.set_image(Global.CARDS[""])  # Assuming this sets a default/blank card image
+				$Game/Panel/P3/HBoxContainer.add_child(newCard)
+				i += 1
+				x_offset += 1
+				
+			i = 1
+			x_offset = 0
+			for card_code in faceUpCodes:
+				var newCard = cardScene.instantiate()
+				newCard.position.y = 160
+				newCard.position.x = 120 + (220 * x_offset)
+				newCard.set_image(Global.CARDS[card_code])
+				$Game/Panel/P3/HBoxContainer.add_child(newCard)
+				i += 1
+				x_offset += 1
+		3:
+			for card_code in faceDownCodes:
+				var newCard = cardScene.instantiate()
+				newCard.position.y = 180
+				newCard.position.x = 120 + (220 * x_offset)
+				newCard.set_image(Global.CARDS[""])  # Assuming this sets a default/blank card image
+				$Game/Panel/P4/HBoxContainer.add_child(newCard)
+				i += 1
+				x_offset += 1
+				
+			i = 1
+			x_offset = 0
+			for card_code in faceUpCodes:
+				var newCard = cardScene.instantiate()
+				newCard.position.y = 160
+				newCard.position.x = 120 + (220 * x_offset)
+				newCard.set_image(Global.CARDS[card_code])
+				$Game/Panel/P4/HBoxContainer.add_child(newCard)
+				i += 1
+				x_offset += 1
 
 
 func set_Labels(name:String,turn:int) -> void:
